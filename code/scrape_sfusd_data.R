@@ -3,14 +3,22 @@ library(rvest)
 library(tidyverse)
 library(fs)
 library(here)
+library(janitor)
 
 ## Constants ----
+## Change to TRUE if you want to overwrite the cached data
 FORCE_RERUN <- FALSE
 
 ## Helper functions ----
+
+## Scrapes the website to get the URL of each school-specific website
+## Note that I set a generous timer (~15 seconds on average) so this
+## can take a while. You only need to run it once (unless the website changes)
+## so be kind and don't lower the max_sleep.
 return_school_urls <- function(max_sleep = 30) {
     holder <- NULL
     
+    ## URL of each search page containing school URLS
     pages <- c(
         paste0(
             "https://www.sfusd.edu/schools-search?",
@@ -28,6 +36,7 @@ return_school_urls <- function(max_sleep = 30) {
         )
     )
     
+    ## Loop and extract each school URL
     for (u in pages) {
         Sys.sleep(stats::runif(1, 0, max_sleep))
         
@@ -42,29 +51,39 @@ return_school_urls <- function(max_sleep = 30) {
     holder
 }
 
+## Given a school URL, reads the HTML and extracts things we want
 parse_school_website <- function(url) {
+    ## Read the HTML
     raw_html <- url %>%
         xml2::read_html()
     
+    ## Read each list item (eg enrollment, principal, etc.)
     x <- raw_html %>%
         rvest::html_nodes(".field-item") %>%
         rvest::html_text(trim = TRUE)
     
+    ## Read the school name
     hero <- raw_html %>%
         rvest::html_nodes(".hero_title") %>%
         rvest::html_text(trim = TRUE)
     
-    parsed_values <- c(hero ,
+    ## Extract the last item in every list pair (these are values)
+    parsed_values <- c(hero,
                        lapply(strsplit(x, "\n"), function(x)
                            trimws(x[[NROW(x)]])))
+    
+    ## Extract the first item in every list pair (these are column names)
     value_labels <-
-        make_clean_names(unlist(lapply(strsplit(x, "\n"), function(x)
+        janitor::make_clean_names(unlist(lapply(strsplit(x, "\n"), function(x)
             x[[1]])))
+    
+    ## The "about" column changes per school so we rename it
     value_labels[grep("about_", value_labels, fixed = TRUE)] <-
         "about"
     
     names(parsed_values) <- c("school_name", value_labels)
     
+    ## Remove random misnamed columns
     dplyr::as_tibble(parsed_values) %>%
         dplyr::select(
             -dplyr::starts_with("x2018_"),

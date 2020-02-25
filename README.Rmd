@@ -15,6 +15,4 @@ knitr::opts_chunk$set(
 
 There are 74 public elementary schools in San Francisco Unified School District and zero public data sets containing basic information about these schools. I've scraped the official website and created a `csv` file with public information for each school. This includes school type, estimated enrollment, principal, hours, middle school they feed into, etc. 
 
-The csv file can be viewed in [`./data/sf_elementary_schools.csv`](https://github.com/mkiang/scrape_sf_schools/blob/master/data/sf_elementary_schools.csv).
-
-The data were collected from the [Official SFUSD website](https://www.sfusd.edu/schools-search).
+The data were collected from the [Official SFUSD website](https://www.sfusd.edu/schools-search). The `csv` file can be viewed in [`./data/sf_elementary_schools.csv`](https://github.com/mkiang/scrape_sf_schools/blob/master/data/sf_elementary_schools.csv).
