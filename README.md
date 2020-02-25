@@ -11,7 +11,7 @@ estimated enrollment, principal, hours, middle school they feed into,
 etc.
 
 The csv file can be viewed in
-[`./data/sf_elementary_schools.csv`](https://github.com/mkiang/scrap_sf_schools/blob/master/data/sf_elementary_schools.csv).
+[`./data/sf_elementary_schools.csv`](https://github.com/mkiang/scrape_sf_schools/blob/master/data/sf_elementary_schools.csv).
 
 The data were collected from the [Official SFUSD
 website](https://www.sfusd.edu/schools-search).
