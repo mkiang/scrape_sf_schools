@@ -7,7 +7,7 @@ library(janitor)
 
 ## Constants ----
 ## Change to TRUE if you want to overwrite the cached data
-FORCE_RERUN <- FALSE
+FORCE_RERUN <- TRUE
 
 ## Helper functions ----
 
@@ -90,7 +90,8 @@ parse_school_website <- function(url) {
             -dplyr::starts_with("x2017_"),
             -dplyr::starts_with("x018"),
             -dplyr::starts_with("x20108_"),
-            -dplyr::starts_with("x201_8_")
+            -dplyr::starts_with("x201_8_"),
+            -dplyr::starts_with("x2019")
         )
 }
 
